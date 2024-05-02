@@ -1,97 +1,81 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
-	private static final int PORT = 10001;
-	private static final int MAX_PLAYERS = 5;
-	private static final int MIN_PLAYERS = 2;
-	private int numRows = 6;
-	private int numCols = 10;
-	private boolean gameStarted = false;
-	
-	private List<Player> players;
-	private GameState gameState;
-	
-	public Server() {
-		players = new ArrayList<>();
-		gameState = new GameState(numRows, numCols);
-	}
-	
-	public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Server started, waiting for players...");
+    private static final int PORT = 1234;
+    private ServerSocket serverSocket;
+    private List<ClientHandler> clients = new CopyOnWriteArrayList<>();
 
+    public Server() throws IOException {
+        serverSocket = new ServerSocket(PORT);
+        System.out.println("Server started on port " + PORT);
+    }
+
+    public void startServer() {
+        try {
             while (true) {
-                if (players.size() < MAX_PLAYERS && !gameStarted) {
-                    Socket socket = serverSocket.accept();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String playerName = in.readLine(); // Read player name from client
-
-                    Player player = new Player(socket, playerName);
-                    players.add(player);
-                    
-                    System.out.println("New player joined: " + player.getName());
-
-                    if (players.size() >= MIN_PLAYERS) {
-                        broadcastMessage("Enough players have joined. Send 'start' to begin the game.");
-                    }
-                }
+                Socket socket = serverSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(socket, this);
+                clients.add(clientHandler);
+                new Thread(clientHandler).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-	
-	public synchronized void handleCommand(Player player, String command) {
-        if (command.toLowerCase().equals("start") && players.size() >= MIN_PLAYERS && !gameStarted) {
-            gameStarted = true;
-            broadcastMessage("Game has started!");
-            initializeGame();
-        } else {
-            player.sendMessage("Invalid command or insufficient players to start the game.");
+
+    public void removeClient(ClientHandler client) {
+        clients.remove(client);
+        System.out.println(client.getUserName() + " has disconnected.");
+    }
+
+    public static void main(String[] args) throws IOException {
+        Server server = new Server();
+        server.startServer();
+    }
+}
+
+class ClientHandler implements Runnable {
+    private Socket socket;
+    private Server server;
+    private BufferedReader reader;
+    private String userName;
+
+    public ClientHandler(Socket socket, Server server) {
+        this.socket = socket;
+        this.server = server;
+    }
+
+    @Override
+    public void run() {
+        try {
+            InputStream input = socket.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(input));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            out.println("Enter your username:");
+            userName = reader.readLine();
+            System.out.println(userName + " has connected.");
+
+            String clientMessage;
+            do {
+                clientMessage = reader.readLine();
+                if (clientMessage != null && !clientMessage.equalsIgnoreCase("quit")) {
+                    System.out.println("[" + userName + "]: " + clientMessage);
+                }
+            } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
+
+            server.removeClient(this);
+            socket.close();
+        } catch (IOException ex) {
+            System.out.println("Error in ClientHandler: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
-	
-	private void initializeGame() {
-        // TODO
-        System.out.println("Game initialization...");
+
+    String getUserName() {
+        return userName;
     }
-	
-	public synchronized void placePiece(Player player, int row, int col) {
-		if (gameState.isValidMove(player, row, col)) {
-			gameState.placePiece(player, row, col);
-			broadcastMessage(player.getName() + " placed a piece to (" + row + ", " + col + ")");
-			updateGameState();
-		} else {
-			player.sendMessage("Invalid move. Please retry.");
-		}
-	}
-	
-	public synchronized void checkPiece(Player player, int row, int col) {
-		Piece piece = gameState.checkPiece(row, col);
-		player.sendMessage("Piece from position (" + row + ", " + col + ") is the colour " + piece.getColor());
-	}
-	
-	private synchronized void updateGameState() {
-		for (Player player : players) {
-			player.sendGameState(gameState);
-		}
-	}
-	
-	private synchronized void broadcastMessage(String message) { 
-		for (Player player : players) {
-			player.sendMessage(message);
-		}
-	}
-
-	public static void main(String[] args) {
-		Server server = new Server();
-		server.start();
-	}
-
 }
