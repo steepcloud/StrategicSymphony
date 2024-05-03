@@ -11,8 +11,19 @@ public class Client {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-            // Read the initial prompt from the server and respond with a username
-            System.out.println(in.readLine());  // Should prompt for username
+            // Start a new thread to handle reading messages from the server
+            Thread serverListener = new Thread(() -> {
+                try {
+                    String fromServer;
+                    while ((fromServer = in.readLine()) != null) {
+                        System.out.println(fromServer);
+                    }
+                } catch (IOException e) {
+                    System.out.println("Connection closed by server.");
+                }
+            });
+            serverListener.start();
+            
             String userName = stdIn.readLine();
             out.println(userName);
 
