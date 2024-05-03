@@ -57,10 +57,15 @@ class ClientHandler implements Runnable {
                 if (lowerMessage.startsWith("color ")) {
                 	String arg = lowerMessage.substring(6).trim();
                 	server.changeColor(this, arg);
-                }else if(lowerMessage.startsWith("ready")) {
+                } else if (lowerMessage.startsWith("ready")) {
                 	server.changeReadyStatus(this);
-                }
-                
+                } else if (lowerMessage.startsWith("put")) {
+                	String[] parts = lowerMessage.split(" ");
+                    int x = Integer.parseInt(parts[1]);
+                    int y = Integer.parseInt(parts[2]);
+                    
+                    server.putPiece(x, y, this);               
+                }   
             } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
 
             server.removeClient(this);
@@ -73,5 +78,4 @@ class ClientHandler implements Runnable {
     public void sendMessage(String message) {
         writer.println(message);
     }
-
 }
