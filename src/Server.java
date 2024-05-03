@@ -34,15 +34,26 @@ public class Server {
     
     public void changeReadyStatus(ClientHandler client) {
     	client.ready = !client.ready;
-    	client.sendMessage("You are now "+ (client.ready ? "":"not ") +"ready");
+    	client.sendMessage("You are now "+ (client.ready ? "" : "not ") +"ready");
     	
     	if (clients.size() > 1) {
-    		for (ClientHandler i :clients) {
+    		for (ClientHandler i : clients) {
     			if (i.ready == false) {
     				return;
     			}
     		}
     		this.startGame();
+    	}
+    }
+    
+    public void putPiece(int x, int y, ClientHandler client) {
+    	if (game.putPiece(x, y, client.id)) {
+    		client.sendMessage("Piece was placed.");
+    		System.out.println("Piece was placed.");
+    	}
+    	else {
+    		client.sendMessage("Not your turn");
+    		System.out.println("Not your turn.");
     	}
     }
     
@@ -99,8 +110,23 @@ public class Server {
     		}
     	}
     	System.out.println("Game ready to start");
-    	game = new Game(6, 10, clients);
+    	game = new Game(6, 10, clients, this);
     	game.startGame();
+    	updatePlayers();
+    }
+    
+    public void updatePlayers() {
+    	String sboard = "";
+    	for (int i = 0; i < game.numRows; i++) {
+    		for (int j = 0; j < game.numCols; j++) {
+    			sboard += game.board[i][j] + " ";
+    		}
+    		sboard += '\n';
+    	}
+    	
+    	for (int i = 0; i < clients.size(); i++) {
+    		clients.get(i).sendMessage(sboard + (game.currentTurn == i ? "Your turn" : ""));
+    	}
     }
     
     public static void main(String[] args) throws IOException {
