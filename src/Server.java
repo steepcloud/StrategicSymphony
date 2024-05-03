@@ -7,6 +7,7 @@ public class Server {
     private static final int PORT = 1234;
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new CopyOnWriteArrayList<>();
+    private Game game;
 
     public Server() throws IOException {
         serverSocket = new ServerSocket(PORT);
@@ -35,7 +36,7 @@ public class Server {
     	client.ready = !client.ready;
     	client.sendMessage("You are now "+ (client.ready ? "":"not ") +"ready");
     	
-    	if (clients.size()>1) {
+    	if (clients.size() > 1) {
     		for (ClientHandler i :clients) {
     			if (i.ready == false) {
     				return;
@@ -43,7 +44,6 @@ public class Server {
     		}
     		this.startGame();
     	}
-    	
     }
     
     public void changeColor(ClientHandler client, String color) {
@@ -92,7 +92,6 @@ public class Server {
         return true;
     }
     
-
     private void startGame() {
     	for (ClientHandler client : clients) {
     		if (client.color == "") {
@@ -100,73 +99,12 @@ public class Server {
     		}
     	}
     	System.out.println("Game ready to start");
+    	game = new Game(6, 10, clients);
+    	game.startGame();
     }
     
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.startServer();
     }
-}
-
-class ClientHandler implements Runnable {
-	
-	public static List<String> colors = Arrays.asList("r","g","b","y","p") ;
-	
-    private Socket socket;
-    private Server server;
-    private BufferedReader reader;
-    private PrintWriter writer;
-    public String userName;
-    public Boolean ready = false;
-    public String color = "";
-
-    public ClientHandler(Socket socket, Server server) {
-        this.socket = socket;
-        this.server = server;
-        try {
-            InputStream input = socket.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(input));
-            OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
-        } catch (IOException ex) {
-            System.out.println("Error setting up streams: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-    @Override
-    public void run() {
-        try {
-        	
-            sendMessage("Enter your username:");
-            userName = reader.readLine();
-            System.out.println(userName + " has connected.");
-
-            String clientMessage;
-            String lowerMessage;
-            do {
-                clientMessage = reader.readLine();
-                lowerMessage = clientMessage.toLowerCase();
-                
-                //start checking for commands
-                
-                if (lowerMessage.startsWith("color ")) {
-                	String arg = lowerMessage.substring(6).trim();
-                	server.changeColor(this, arg);
-                }else if(lowerMessage.startsWith("ready")) {
-                	server.changeReadyStatus(this);
-                }
-                
-            } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
-
-            server.removeClient(this);
-            socket.close();
-        } catch (IOException ex) {
-            System.out.println("Error in ClientHandler: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-    public void sendMessage(String message) {
-        writer.println(message);
-    }
-
 }
