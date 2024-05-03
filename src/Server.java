@@ -33,6 +33,7 @@ public class Server {
     
     public void changeReadyStatus(ClientHandler client) {
     	client.ready = !client.ready;
+    	client.sendMessage("You are now "+ (client.ready ? "":"not ") +"ready");
     	//TODO send ready status to all other players
     }
     
@@ -110,9 +111,11 @@ class ClientHandler implements Runnable {
                 
                 //start checking for commands
                 
-                if (clientMessage.startsWith("color ")) {
+                if (lowerMessage.startsWith("color ")) {
                 	String arg = lowerMessage.substring(6).trim();
                 	server.changeColor(this, arg);
+                }else if(lowerMessage.startsWith("ready")) {
+                	server.changeReadyStatus(this);
                 }
                 
             } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
