@@ -34,24 +34,26 @@ public class Server {
     public void changeReadyStatus(ClientHandler client) {
     	client.ready = !client.ready;
     	client.sendMessage("You are now "+ (client.ready ? "":"not ") +"ready");
-    	//TODO send ready status to all other players
+    	
+    	if (clients.size()>1) {
+    		for (ClientHandler i :clients) {
+    			if (i.ready == false) {
+    				return;
+    			}
+    		}
+    		this.startGame();
+    	}
+    	
     }
     
     public void changeColor(ClientHandler client, String color) {
     	//check if color exist
     	if (ClientHandler.colors.contains(color)) {
-
-        	//check if color is available
-        	Boolean available = true;
-
-        	for (ClientHandler i :clients) {
-        		if (i.color.equalsIgnoreCase(color)) {
-        			available = false;
-        		}
-        	}
-        	if (available) {
+    		
+        	if (isColorAvailable(color)) {
             	client.color = color;
-            	client.sendMessage("Color changed to "+color);
+            	client.sendMessage("Color changed to " + color);
+        		System.out.println(client.userName + " changed to " + color);
         	}
         	else {
         		client.sendMessage("Color is already taken");
@@ -62,6 +64,42 @@ public class Server {
     		client.sendMessage(color + " is not a valid color");
     	}
     	
+    }
+    
+    private void assignRandomColor(ClientHandler client) {
+        List<String> availableColors = new ArrayList<>();
+        for (String color : ClientHandler.colors) {
+            if (isColorAvailable(color)) {
+                availableColors.add(color);
+            }
+        }
+        
+        if (!availableColors.isEmpty()) {
+            Collections.shuffle(availableColors);
+            String selectedColor = availableColors.get(0);
+            changeColor(client, selectedColor);
+        } else {
+        	System.out.println("No available colors.");
+        }
+    }
+    
+    private boolean isColorAvailable(String color) {
+        for (ClientHandler client : clients) {
+            if (color.equalsIgnoreCase(client.color)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+
+    private void startGame() {
+    	for (ClientHandler client : clients) {
+    		if (client.color == "") {
+    			assignRandomColor(client);
+    		}
+    	}
+    	System.out.println("Game ready to start");
     }
     
     public static void main(String[] args) throws IOException {
