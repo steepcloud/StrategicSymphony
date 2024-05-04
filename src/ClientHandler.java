@@ -18,6 +18,9 @@ class ClientHandler implements Runnable {
     private String userName;
     private Boolean ready = false;
     private String color = "";
+    private Boolean freedomJoker = true;
+    private Boolean replaceJoker = true;
+    private Boolean doubleMoveJoker = true;
 
     public ClientHandler(Socket socket, Server server, int id) {
         this.socket = socket;
@@ -106,7 +109,38 @@ class ClientHandler implements Runnable {
                     int y = Integer.parseInt(parts[2]);
                     
                     server.putPiece(x, y, this);               
-                }   
+                } else if (lowerMessage.startsWith("jokers")) {
+                	String message = "";
+                	if (this.freedomJoker) {
+                		message += "freedom joker";
+                	}
+                	if (this.replaceJoker) {
+                		message += (message.isEmpty() ? "" : ", ") + "replace joker";
+                	}
+                	if (this.doubleMoveJoker) {
+                		message += (message.isEmpty() ? "" : ", ") + "double move joker";
+                	}
+                	
+                	this.sendMessage((message.isEmpty() ? "You don't have any jokers." : message + "."));
+                } else if (lowerMessage.startsWith("freedom")) {
+                	if (this.freedomJoker) {
+                		server.toggleFreedomJoker(this);
+                	} else {
+                		this.sendMessage("You don't have this joker.");
+                	}
+                } else if (lowerMessage.startsWith("replace")) {
+                	if (this.replaceJoker) {
+                		server.toggleReplaceJoker(this);
+                	} else {
+                		this.sendMessage("You don't have this joker.");
+                	}
+                } else if (lowerMessage.startsWith("double move")) {
+                	if (this.doubleMoveJoker) {
+                		server.toggleDoubleMoveJoker(this);
+                	} else {
+                		this.sendMessage("You don't have this joker.");
+                	}
+                }
             } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
 
             server.removeClient(this);
