@@ -2,9 +2,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Game {
-	public int[][] board;
-	public int numRows = 6;
-	public int numCols = 10;
+	private int[][] board;
+	private int numRows = 6;
+	private int numCols = 10;
 	private List<ClientHandler> players;
 	public int currentTurn;
 	private boolean keepTurn = false;
@@ -19,6 +19,18 @@ public class Game {
 		this.server = server;
 	}
 	
+	public int getNumRows() {
+		return numRows;
+	}
+	
+	public int getNumCols() {
+		return numCols;
+	}
+	
+	public int getValueAtPosition(int x, int y) {
+		return board[x][y];
+	}
+	
 	public void startGame() {
 		Random rand = new Random();
         for (ClientHandler player : players) {
@@ -27,7 +39,7 @@ public class Game {
                 row = rand.nextInt(numRows);
                 col = rand.nextInt(numCols);
             } while (board[row][col] != 0);
-            board[row][col] = player.id;
+            board[row][col] = player.getId();
         }
         
         for (int i = 0; i < numRows; i++) {
@@ -39,7 +51,7 @@ public class Game {
 	}
 	
 	public Boolean putPiece(int x, int y, int id) {
-		if (id == players.get(currentTurn).id) {
+		if (id == players.get(currentTurn).getId()) {
 			board[x][y] = id;
 			advanceTurn(); 
 			return true;
