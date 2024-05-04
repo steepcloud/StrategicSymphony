@@ -184,8 +184,42 @@ public class Server {
     	}
     }
     
+    public ClientHandler getHandlerById(int id) throws Exception {
+    	for (ClientHandler client :this.clients) {
+    		if (client.getId() == id) {
+    			return client;
+    		}
+    	}
+    	throw new Exception("No Handler found for id:"+id);
+    }
+    
+    public void pass(ClientHandler client) {
+    	if (game.checkTurn(client.getId())) {
+    		game.pass(client);
+    		if(!game.checkEnd()) {
+        		updatePlayers();
+    		}else {
+    			endGame();
+    		}
+    	}
+    	else {
+    		client.sendMessage("Not your turn");
+    	}
+    }
+    
+    private void endGame() {
+    	ClientHandler winner = game.findWinner();
+
+    	for (int i = 0; i < clients.size(); i++) {
+    		System.out.println("pula"+i);
+    		System.out.println(clients.get(i).getUserName());
+    		clients.get(i).sendMessage("The winner is "+winner.getUserName());
+    	}
+    }
+    
     public static void main(String[] args) throws IOException {
         Server server = new Server();
         server.startServer();
     }
+    
 }
