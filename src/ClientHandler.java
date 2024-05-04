@@ -19,9 +19,19 @@ class ClientHandler implements Runnable {
     private Boolean ready = false;
     private String color = "";
     private Boolean freedomJoker = true;
-    private Boolean replaceJoker = true;
+	private Boolean replaceJoker = true;
     private Boolean doubleMoveJoker = true;
 
+    public void setFreedomJoker(Boolean freedomJoker) {
+		this.freedomJoker = freedomJoker;
+	}
+    public void setReplaceJoker(Boolean replaceJoker) {
+		this.replaceJoker = replaceJoker;
+	}
+    public void setDoubleMoveJoker(Boolean doubleMoveJoker) {
+		this.doubleMoveJoker = doubleMoveJoker;
+	}
+    
     public ClientHandler(Socket socket, Server server, int id) {
         this.socket = socket;
         this.server = server;
@@ -140,6 +150,9 @@ class ClientHandler implements Runnable {
                 	} else {
                 		this.sendMessage("You don't have this joker.");
                 	}
+                	
+                } else if (lowerMessage.startsWith("pass")) {
+                	server.pass(this);
                 }
             } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
 
