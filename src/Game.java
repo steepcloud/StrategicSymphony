@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Game {
 	private int[][] board;
@@ -11,12 +13,13 @@ public class Game {
 	private boolean doubleMoveJokerUsed = false;
     private Boolean replaceJokerUsed = false;
     private Boolean freedomJokerUsed = false;
+    private List<ClientHandler> playerPassOrder = new CopyOnWriteArrayList<>();
 	
 	public Game(int numRows, int numCols, List<ClientHandler> players, Server server) {
 		this.numRows = numRows;
 		this.numCols = numCols;
 		this.board = new int[numRows][numCols];
-		this.players = players;
+		this.players =  new ArrayList<>(players);
 		currentTurn = 0;
 		this.server = server;
 	}
@@ -83,6 +86,7 @@ public class Game {
 	public Boolean putPiece(int x, int y, int id) {
 		if (checkTurn(id)) {
 			board[x][y] = id;
+			removeJokers();
 			advanceTurn();
 			resetJokers();
 			return true;
@@ -137,5 +141,64 @@ public class Game {
 		doubleMoveJokerUsed = false;
 		replaceJokerUsed = false;
 		freedomJokerUsed = false;
+	}
+	
+	private void removeJokers() {
+		ClientHandler handler;
+		try {
+			handler = server.getHandlerById(players.get(currentTurn).getId());
+
+			if (this.freedomJokerUsed) {
+				handler.setFreedomJoker(false);
+			}
+			if (this.replaceJokerUsed) {
+				handler.setReplaceJoker(false);
+			}
+			if (this.doubleMoveJokerUsed) {
+				handler.setDoubleMoveJoker(false);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void pass(ClientHandler player) {
+		resetJokers();
+		players.remove(currentTurn);
+
+		if (currentTurn>=players.size()) {
+			currentTurn = 0;
+		}
+		playerPassOrder.add(player);
+		System.out.println(playerPassOrder);
+	}
+	
+	public boolean checkEnd() {
+		System.out.println(players);
+		return players.isEmpty();
+	}
+	
+	private int calculateScore(int id) {
+		int score = 0;
+		for (int i = 0 ; i < numRows ; i ++) {
+			for (int j = 0; j < numCols ; j++) {
+				if(board[i][j]==id) score ++;
+			}
+		}
+		return score;
+	}
+	
+	public ClientHandler findWinner() {
+		ClientHandler winner = null;
+		int winnerScore = 0;
+		for(ClientHandler player : playerPassOrder) {
+			int score = calculateScore(player.getId());
+			if(score >= winnerScore) {
+				winnerScore = score;
+				winner = player;
+			}
+		}
+
+		return winner;
 	}
 }
