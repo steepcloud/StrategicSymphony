@@ -49,13 +49,45 @@ public class Server {
     }
     
     public void putPiece(int x, int y, ClientHandler client) {
-    	if (game.putPiece(x, y, client.getId())) {
-    		client.sendMessage("Piece was placed.");
-    		System.out.println("Piece was placed.");
+    	if (game.isValidMove(x, y, client.getId())) {
+	    	if (game.putPiece(x, y, client.getId())) {
+	    		client.sendMessage("Piece was placed.");
+	    		System.out.println("Piece was placed.");
+	    	}
+	    	else {
+	    		client.sendMessage("Not your turn");
+	    		System.out.println("Not your turn.");
+	    	}
+    	} else {
+    		client.sendMessage("Invalid move. You can only place a piece in an empty cell with at least one neighboring cell of the same color.");
+            System.out.println("Invalid move. Player " + client.getUserName() + " tried to place piece at (" + x + ", " + y + ").");
     	}
-    	else {
-    		client.sendMessage("Not your turn");
-    		System.out.println("Not your turn.");
+    }
+    
+    public void toggleFreedomJoker(ClientHandler client) {
+    	if (game.checkTurn(client.getId())) {
+    		game.setFreedomJoker(!game.getFreedomJoker());
+    		client.sendMessage("Freedom joker is now " + (game.getFreedomJoker() ? "on." : "off."));
+    	} else {
+    		client.sendMessage("Not your turn.");
+    	}
+    }
+    
+    public void toggleReplaceJoker(ClientHandler client) {
+    	if (game.checkTurn(client.getId())) {
+    		game.setReplaceJoker(!game.getReplaceJoker());
+    		client.sendMessage("Replace joker is now " + (game.getReplaceJoker() ? "on." : "off."));
+    	} else {
+    		client.sendMessage("Not your turn.");
+    	}
+    }
+    
+    public void toggleDoubleMoveJoker(ClientHandler client) {
+    	if (game.checkTurn(client.getId())) {
+    		game.setDoubleMoveJoker(!game.getDoubleMoveJoker());
+    		client.sendMessage("Double move joker is now " + (game.getDoubleMoveJoker() ? "on." : "off."));
+    	} else {
+    		client.sendMessage("Not your turn.");
     	}
     }
     
