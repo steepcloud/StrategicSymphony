@@ -8,6 +8,7 @@ public class Server {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new CopyOnWriteArrayList<>();
     private Game game;
+    private int nextClientId = 1;
 
     public Server() throws IOException {
         serverSocket = new ServerSocket(PORT);
@@ -18,7 +19,8 @@ public class Server {
         try {
             while (true) {
                 Socket socket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(socket, this);
+                ClientHandler clientHandler = new ClientHandler(socket, this, nextClientId);
+                nextClientId++;
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
             }
@@ -29,16 +31,16 @@ public class Server {
 
     public void removeClient(ClientHandler client) {
         clients.remove(client);
-        System.out.println(client.userName + " has disconnected.");
+        System.out.println(client.getUserName() + " has disconnected.");
     }
     
     public void changeReadyStatus(ClientHandler client) {
-    	client.ready = !client.ready;
-    	client.sendMessage("You are now "+ (client.ready ? "" : "not ") +"ready");
+    	client.setReady(!client.isReady());
+    	client.sendMessage("You are now "+ (client.isReady() ? "" : "not ") +"ready");
     	
     	if (clients.size() > 1) {
     		for (ClientHandler i : clients) {
-    			if (i.ready == false) {
+    			if (i.isReady() == false) {
     				return;
     			}
     		}
@@ -47,7 +49,7 @@ public class Server {
     }
     
     public void putPiece(int x, int y, ClientHandler client) {
-    	if (game.putPiece(x, y, client.id)) {
+    	if (game.putPiece(x, y, client.getId())) {
     		client.sendMessage("Piece was placed.");
     		System.out.println("Piece was placed.");
     	}
@@ -58,28 +60,49 @@ public class Server {
     }
     
     public void changeColor(ClientHandler client, String color) {
-    	//check if color exist
-    	if (ClientHandler.colors.contains(color)) {
+    	//check if color exists
+    	if (client.getColors().contains(color)) {
     		
         	if (isColorAvailable(color)) {
-            	client.color = color;
+            	client.setColor(color);
             	client.sendMessage("Color changed to " + color);
-        		System.out.println(client.userName + " changed to " + color);
+        		System.out.println(client.getUserName() + " changed to " + color);
+        		
+        		sendReadyStatusToOtherPlayers(client);
         	}
         	else {
         		client.sendMessage("Color is already taken");
         	}
-        	//TODO send ready status to all other players
     	}
     	else {
     		client.sendMessage(color + " is not a valid color");
     	}
-    	
+    }
+    
+    private void sendReadyStatusToOtherPlayers(ClientHandler changedClient) {
+        for (ClientHandler player : clients) {
+            if (player != changedClient) {
+                player.sendMessage(changedClient.getUserName() + " changed color and is now " + (changedClient.isReady() ? "" : "not ") + "ready.");
+            }
+        }
+    }
+    
+    public Boolean isValidUserName(String name) {
+    	return !name.contains(" ") && name.length() <= 50;
+    }
+    
+    public Boolean isUniqueUserName(String name) {
+        for (ClientHandler client : clients) {
+            if (client.getUserName().trim().equalsIgnoreCase(name.trim())) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private void assignRandomColor(ClientHandler client) {
         List<String> availableColors = new ArrayList<>();
-        for (String color : ClientHandler.colors) {
+        for (String color : client.getColors()) {
             if (isColorAvailable(color)) {
                 availableColors.add(color);
             }
@@ -96,7 +119,7 @@ public class Server {
     
     private boolean isColorAvailable(String color) {
         for (ClientHandler client : clients) {
-            if (color.equalsIgnoreCase(client.color)) {
+            if (color.equalsIgnoreCase(client.getColor())) {
                 return false;
             }
         }
@@ -105,7 +128,7 @@ public class Server {
     
     private void startGame() {
     	for (ClientHandler client : clients) {
-    		if (client.color == "") {
+    		if (client.getColor() == "") {
     			assignRandomColor(client);
     		}
     	}
@@ -117,9 +140,9 @@ public class Server {
     
     public void updatePlayers() {
     	String sboard = "";
-    	for (int i = 0; i < game.numRows; i++) {
-    		for (int j = 0; j < game.numCols; j++) {
-    			sboard += game.board[i][j] + " ";
+    	for (int i = 0; i < game.getNumRows(); i++) {
+    		for (int j = 0; j < game.getNumCols(); j++) {
+    			sboard += game.getValueAtPosition(i, j) + " ";
     		}
     		sboard += '\n';
     	}
