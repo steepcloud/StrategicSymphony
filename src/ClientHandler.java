@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +22,7 @@ class ClientHandler implements Runnable {
     private Boolean freedomJoker = true;
 	private Boolean replaceJoker = true;
     private Boolean doubleMoveJoker = true;
+    private Boolean gameStarted = false;
 
     public void setFreedomJoker(Boolean freedomJoker) {
 		this.freedomJoker = freedomJoker;
@@ -61,6 +63,14 @@ class ClientHandler implements Runnable {
     
     public void setReady(Boolean ready) {
     	this.ready = ready;
+    }
+    
+    public Boolean isGameStarted() {
+    	return gameStarted;
+    }
+    
+    public void setGameStarted(Boolean gameStarted) {
+    	this.gameStarted = gameStarted;
     }
     
     public String getColor() {
@@ -107,12 +117,13 @@ class ClientHandler implements Runnable {
                 lowerMessage = clientMessage.toLowerCase();
                 
                 //start checking for commands
-                
-                if (lowerMessage.startsWith("color ")) {
-                	String arg = lowerMessage.substring(6).trim();
-                	server.changeColor(this, arg);
-                } else if (lowerMessage.startsWith("ready")) {
-                	server.changeReadyStatus(this);
+                if (!gameStarted) {
+	                if (lowerMessage.startsWith("color ")) {
+	                	String arg = lowerMessage.substring(6).trim();
+	                	server.changeColor(this, arg);
+	                } else if (lowerMessage.startsWith("ready")) {
+	                	server.changeReadyStatus(this);
+	                }
                 } else if (lowerMessage.startsWith("put")) {
                 	String[] parts = lowerMessage.split(" ");
                     int x = Integer.parseInt(parts[1]);
@@ -158,9 +169,20 @@ class ClientHandler implements Runnable {
 
             server.removeClient(this);
             socket.close();
+        } catch (SocketException e) {
+        	System.out.println("Connection reset by client.");
         } catch (IOException ex) {
             System.out.println("Error in ClientHandler: " + ex.getMessage());
             ex.printStackTrace();
+        } finally {
+        	try {
+        		reader.close();
+        		writer.close();
+        		socket.close();
+        		server.removeClient(this);
+        	} catch (IOException ex) {
+        		System.out.println("Error closing resources: " + ex.getMessage());
+        	}
         }
     }
     
