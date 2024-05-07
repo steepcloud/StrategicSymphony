@@ -210,7 +210,7 @@ public class Server {
     private void endGame() {
     	ClientHandler winner = game.findWinner();
 
-    	for (int i = 0; i < clients.size(); i++)
+    	for (int i = 0; i < clients.size(); i++) {
     		System.out.println(clients.get(i).getUserName());
     		clients.get(i).sendMessage("The winner is "+winner.getUserName());
     	}
