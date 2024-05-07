@@ -92,22 +92,26 @@ public class Server {
     }
     
     public void changeColor(ClientHandler client, String color) {
-    	//check if color exists
-    	if (client.getColors().contains(color)) {
-    		
-        	if (isColorAvailable(color)) {
-            	client.setColor(color);
-            	client.sendMessage("Color changed to " + color);
-        		System.out.println(client.getUserName() + " changed to " + color);
-        		
-        		sendReadyStatusToOtherPlayers(client);
-        	}
-        	else {
-        		client.sendMessage("Color is already taken");
-        	}
-    	}
-    	else {
-    		client.sendMessage(color + " is not a valid color");
+    	if (client.isGameStarted()) {
+    		client.sendMessage("Game has already started. You cannot change color.");
+    	} else {
+	    	//check if color exists
+	    	if (client.getColors().contains(color)) {
+	    		
+	        	if (isColorAvailable(color)) {
+	            	client.setColor(color);
+	            	client.sendMessage("Color changed to " + color);
+	        		System.out.println(client.getUserName() + " changed to " + color);
+	        		
+	        		sendReadyStatusToOtherPlayers(client);
+	        	}
+	        	else {
+	        		client.sendMessage("Color is already taken");
+	        	}
+	    	}
+	    	else {
+	    		client.sendMessage(color + " is not a valid color");
+	    	}
     	}
     }
     
@@ -165,6 +169,9 @@ public class Server {
     		}
     	}
     	System.out.println("Game ready to start");
+    	for (ClientHandler client : clients) {
+    		client.setGameStarted(true);
+    	}
     	game = new Game(6, 10, clients, this);
     	game.startGame();
     	updatePlayers();
