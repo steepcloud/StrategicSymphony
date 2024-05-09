@@ -7,7 +7,7 @@ Strategic Symphony is a multiplayer game server implemented in Java. It allows m
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Game rules](#gamerules)
+- [Game rules](#game-rules)
 - [License](#license)
 
 ## Introduction
