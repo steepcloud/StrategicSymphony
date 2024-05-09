@@ -118,22 +118,6 @@ class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-        	// TODO: valid / unique username check
-        	/*
-        	boolean validUsername = false;
-            while (!validUsername) {
-                sendMessage("Enter your username:");
-                userName = reader.readLine();
-                
-                if (!server.isValidUserName(userName)) {
-                    sendMessage("Invalid username. Username should not contain spaces and should be at most 50 characters long.");
-                } else if (!server.isUniqueUserName(userName)) {
-                    sendMessage("Username already taken. Please choose a different username.");
-                } else {
-                    validUsername = true;
-                }
-            }
-            */
          	sendMessage("Enter your username:");
         	userName = reader.readLine();
         	System.out.println(userName + " has connected.");
