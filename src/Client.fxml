@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Client">
+   <center>
+      <AnchorPane prefHeight="516.0" prefWidth="680.0" style="-fx-background-color: #2c303a;" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="usernameBox" layoutX="46.0" layoutY="84.0" prefHeight="25.0" prefWidth="350.0" promptText="Name:" style="-fx-background-color: #21242c; -fx-text-fill: #bababa;">
+               <font>
+                  <Font name="Segoe UI Semibold" size="12.0" />
+               </font>
+            </TextField>
+            <Label fx:id="usernamelbl" alignment="CENTER" layoutX="35.0" layoutY="59.0" prefHeight="25.0" prefWidth="134.0" text="Enter your name:" textFill="#d4af37">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <effect>
+                  <Glow level="0.72" />
+               </effect>
+            </Label>
+            <Button fx:id="enterButton" layoutX="279.0" layoutY="130.0" mnemonicParsing="false" onAction="#sendUsername" prefHeight="30.0" prefWidth="128.0" style="-fx-background-color: #21242c;" text="Enter game" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="errorLbl" alignment="CENTER" layoutX="125.0" layoutY="277.0" opacity="0.0" prefHeight="25.0" prefWidth="278.0" text="Ai introdus numele si parola gresit!" textFill="#d13838">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <effect>
+                  <Glow level="0.72" />
+               </effect>
+            </Label>
+            <Button alignment="CENTER" layoutX="640.0" layoutY="17.0" mnemonicParsing="false" onAction="#exitFunction" style="-fx-background-color: #a63838; -fx-background-radius: 50%;" text="X" textAlignment="CENTER" textFill="#ebebeb">
+               <font>
+                  <Font name="Russo One" size="13.0" />
+               </font>
+               <effect>
+                  <Glow />
+               </effect>
+            </Button>
+            <Label fx:id="yourTurnLbl" alignment="CENTER" layoutX="217.0" layoutY="347.0" prefHeight="25.0" prefWidth="247.0" text="Your turn!" textFill="#d4af37">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <effect>
+                  <Glow level="0.72" />
+               </effect>
+            </Label>
+            <Label alignment="CENTER" layoutX="241.0" layoutY="16.0" prefHeight="28.0" prefWidth="204.0" text="Strategic Symphony" textFill="#d4af37">
+               <font>
+                  <Font name="Russo One" size="18.0" />
+               </font>
+               <effect>
+                  <Bloom />
+               </effect>
+            </Label>
+            <Button fx:id="readyButton" layoutX="279.0" layoutY="176.0" mnemonicParsing="false" onAction="#sendReady" prefHeight="30.0" prefWidth="128.0" style="-fx-background-color: #21242c;" text="Ready" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="userNameLbl" alignment="CENTER" layoutX="241.0" layoutY="45.0" prefHeight="28.0" prefWidth="204.0" text="Username" textFill="#d4af37">
+               <font>
+                  <Font name="Russo One" size="18.0" />
+               </font>
+               <effect>
+                  <Bloom />
+               </effect>
+            </Label>
+            <Label fx:id="mLbl11" layoutX="145.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl12" layoutX="185.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl13" layoutX="225.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl14" layoutX="265.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl15" layoutX="305.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl16" layoutX="345.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl17" layoutX="385.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl18" layoutX="425.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl19" layoutX="465.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl110" layoutX="505.0" layoutY="131.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl21" layoutX="145.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl22" layoutX="185.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl23" layoutX="225.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl24" layoutX="265.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl25" layoutX="305.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl26" layoutX="345.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl27" layoutX="385.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl28" layoutX="425.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl29" layoutX="465.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl210" layoutX="505.0" layoutY="161.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl31" layoutX="145.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl32" layoutX="185.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl33" layoutX="225.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl34" layoutX="265.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl35" layoutX="305.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl36" layoutX="345.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl37" layoutX="385.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl38" layoutX="425.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl39" layoutX="465.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl310" layoutX="505.0" layoutY="191.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl41" layoutX="145.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl42" layoutX="185.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl43" layoutX="225.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl44" layoutX="265.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl45" layoutX="305.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl46" layoutX="345.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl47" layoutX="385.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl48" layoutX="425.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl49" layoutX="465.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl410" layoutX="505.0" layoutY="220.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl51" layoutX="145.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl52" layoutX="185.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl53" layoutX="225.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl54" layoutX="265.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl55" layoutX="305.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl56" layoutX="345.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl57" layoutX="385.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl58" layoutX="425.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl59" layoutX="465.0" layoutY="251.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl510" layoutX="505.0" layoutY="250.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl61" layoutX="145.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl62" layoutX="185.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl63" layoutX="225.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl64" layoutX="265.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl65" layoutX="305.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl66" layoutX="345.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl67" layoutX="385.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl68" layoutX="425.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl69" layoutX="465.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="mLbl610" layoutX="505.0" layoutY="280.0" text="0" textFill="WHITE">
+               <font>
+                  <Font name="Russo One" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="freedomButton" layoutX="545.0" layoutY="130.0" mnemonicParsing="false" onAction="#setFreedomJoker" prefHeight="30.0" prefWidth="108.0" style="-fx-background-color: #21242c;" text="Freedom" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="replaceBtn" layoutX="545.0" layoutY="176.0" mnemonicParsing="false" onAction="#setReplaceJoker" prefHeight="30.0" prefWidth="108.0" style="-fx-background-color: #21242c;" text="Replace" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="dMoveBtn" layoutX="545.0" layoutY="218.0" mnemonicParsing="false" onAction="#setDMove" prefHeight="30.0" prefWidth="108.0" style="-fx-background-color: #21242c;" text="Double Move" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="passBtn" layoutX="545.0" layoutY="317.0" mnemonicParsing="false" onAction="#setPass" prefHeight="30.0" prefWidth="108.0" style="-fx-background-color: #21242c;" text="Pass" textAlignment="CENTER" textFill="#bababa">
+               <font>
+                  <Font name="Segoe UI Semibold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="serverMessageLbl" alignment="CENTER" layoutX="149.0" layoutY="395.0" prefHeight="25.0" prefWidth="384.0" text="De la server" textFill="#d4af37">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <effect>
+                  <Glow level="0.72" />
+               </effect>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
