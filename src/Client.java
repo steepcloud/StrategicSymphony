@@ -271,24 +271,6 @@ public class Client extends Application {
 
             System.out.println("Ai trimis ca esti " + message + ".");
             
-            
-            
-            //String userName = stdIn.readLine();
-            //out.println(userName);
-
-            
-            // Continuously read user input and send it to the server
-            /*
-            while (true) {
-                userInput = stdIn.readLine();
-                if (userInput != null) {
-                    out.println(userInput);
-                    if ("quit".equalsIgnoreCase(userInput.trim())) {
-                        break; // Exit the loop if user types 'quit'
-                    }
-                }
-            }
-            */
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + HOST);
             System.exit(1);
@@ -312,8 +294,6 @@ public class Client extends Application {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
-            
-            
             
         }catch (IOException e) {
                 e.printStackTrace();
@@ -694,7 +674,6 @@ public class Client extends Application {
    	 		_readyButton.setDisable(false);
    	 		setUserPicker(0f);
    	 	}
-   	 		
    	 	
    }
     
