@@ -1,3 +1,4 @@
+package application;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,7 @@ class ClientHandler implements Runnable {
 	private Boolean replaceJoker = true;
     private Boolean doubleMoveJoker = true;
     private Boolean gameStarted = false;
-
+    private Boolean firstMessage = true;
     public void setFreedomJoker(Boolean freedomJoker) {
 		this.freedomJoker = freedomJoker;
 	}
@@ -33,6 +34,15 @@ class ClientHandler implements Runnable {
     public void setDoubleMoveJoker(Boolean doubleMoveJoker) {
 		this.doubleMoveJoker = doubleMoveJoker;
 	}
+    public Boolean getFreeDomJoker() {
+    	return this.freedomJoker;
+    }
+    public Boolean getReplaceJoker() {
+    	return this.replaceJoker;
+    }
+    public Boolean getDoubleMoveJoker() {
+    	return this.doubleMoveJoker;
+    }
     
     public ClientHandler(Socket socket, Server server, int id) {
         this.socket = socket;
@@ -85,12 +95,29 @@ class ClientHandler implements Runnable {
     	return colors;
     }
     
+    public void stop() {
+
+        try {
+
+            if (socket != null && !socket.isClosed()) {
+
+                socket.close();
+
+                server.removeClient(this);
+
+            }
+
+        } catch (IOException e) {
+
+            System.err.println("Error stopping client handler: " + e.getMessage());
+
+        }
+
+    }
+    
     @Override
     public void run() {
         try {
-        	
-        	sendMessage("Enter your username:");
-            userName = reader.readLine();
         	// TODO: valid / unique username check
         	/*
         	boolean validUsername = false;
@@ -107,15 +134,15 @@ class ClientHandler implements Runnable {
                 }
             }
             */
-            
-            System.out.println(userName + " has connected.");
+         	sendMessage("Enter your username:");
+        	userName = reader.readLine();
+        	System.out.println(userName + " has connected.");
 
             String clientMessage;
             String lowerMessage;
             do {
                 clientMessage = reader.readLine();
                 lowerMessage = clientMessage.toLowerCase();
-                
                 //start checking for commands
                 if (!gameStarted) {
 	                if (lowerMessage.startsWith("color ")) {
@@ -145,25 +172,30 @@ class ClientHandler implements Runnable {
                 	this.sendMessage((message.isEmpty() ? "You don't have any jokers." : message + "."));
                 } else if (lowerMessage.startsWith("freedom")) {
                 	if (this.freedomJoker) {
+                		
                 		server.toggleFreedomJoker(this);
                 	} else {
-                		this.sendMessage("You don't have this joker.");
+                		this.sendMessage("You don't have freedom joker.");
                 	}
                 } else if (lowerMessage.startsWith("replace")) {
                 	if (this.replaceJoker) {
+                		
                 		server.toggleReplaceJoker(this);
                 	} else {
-                		this.sendMessage("You don't have this joker.");
+                		this.sendMessage("You don't have replace joker.");
                 	}
                 } else if (lowerMessage.startsWith("double move")) {
                 	if (this.doubleMoveJoker) {
                 		server.toggleDoubleMoveJoker(this);
                 	} else {
-                		this.sendMessage("You don't have this joker.");
+                		this.sendMessage("You don't have double move joker.");
                 	}
                 	
                 } else if (lowerMessage.startsWith("pass")) {
                 	server.pass(this);
+                }
+                else if (lowerMessage.startsWith("getcolors")) {
+                	server.getPlayerColors(this);
                 }
             } while (clientMessage != null && !clientMessage.equalsIgnoreCase("quit"));
 
