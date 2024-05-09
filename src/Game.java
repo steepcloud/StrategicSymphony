@@ -1,3 +1,4 @@
+package application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -146,6 +147,7 @@ public class Game {
 	private void removeJokers() {
 		ClientHandler handler;
 		try {
+			
 			handler = server.getHandlerById(players.get(currentTurn).getId());
 
 			if (this.freedomJokerUsed) {
