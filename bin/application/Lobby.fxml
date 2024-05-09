@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LobbyController">
+   <right>
+      <AnchorPane prefHeight="490.0" prefWidth="704.0" style="-fx-background-color: #2c303a;" BorderPane.alignment="CENTER">
+         <children>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="680.0">
+               <top>
+                  <AnchorPane prefHeight="85.0" prefWidth="680.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="nameLbl" alignment="CENTER" layoutX="201.0" layoutY="27.0" prefHeight="25.0" prefWidth="278.0" text="Angelo" textFill="#d13838">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="14.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.72" />
+                           </effect>
+                        </Label>
+                        <Button alignment="CENTER" layoutX="639.0" layoutY="13.0" mnemonicParsing="false" onAction="#exitFunction" style="-fx-background-color: #a63838; -fx-background-radius: 50%;" text="X" textAlignment="CENTER" textFill="#ebebeb">
+                           <font>
+                              <Font name="Russo One" size="13.0" />
+                           </font>
+                           <effect>
+                              <Glow />
+                           </effect>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #272B35;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Ellipse fx:id="imagePlayer1" fill="WHITE" layoutX="97.0" layoutY="70.0" radiusX="27.0" radiusY="43.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label fx:id="namePlayer1" alignment="CENTER" layoutX="31.0" layoutY="121.0" prefHeight="25.0" prefWidth="132.0" text="Angelo" textFill="#d13838">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="14.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.72" />
+                           </effect>
+                        </Label>
+                        <Ellipse fx:id="imagePlayer2" fill="WHITE" layoutX="340.0" layoutY="70.0" radiusX="27.0" radiusY="43.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label fx:id="namePlayer2" alignment="CENTER" layoutX="274.0" layoutY="121.0" prefHeight="25.0" prefWidth="132.0" text="Angelo" textFill="#d13838">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="14.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.72" />
+                           </effect>
+                        </Label>
+                        <Ellipse fx:id="imagePlayer3" fill="WHITE" layoutX="570.0" layoutY="70.0" radiusX="27.0" radiusY="43.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label fx:id="namePlayer3" alignment="CENTER" layoutX="504.0" layoutY="121.0" prefHeight="25.0" prefWidth="132.0" text="Angelo" textFill="#d13838">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="14.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.72" />
+                           </effect>
+                        </Label>
+                        <ListView fx:id="userList" layoutX="45.0" layoutY="163.0" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>

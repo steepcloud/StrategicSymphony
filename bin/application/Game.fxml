@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UsernamePicker">
+   <right>
+      <AnchorPane prefHeight="634.0" prefWidth="815.0" style="-fx-background-color: #2c303a;" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="errorLbl" alignment="CENTER" layoutX="76.0" layoutY="417.0" opacity="0.0" prefHeight="25.0" prefWidth="278.0" text="Ai introdus numele si parola gresit!" textFill="#d13838">
+               <font>
+                  <Font name="Segoe UI Semibold" size="14.0" />
+               </font>
+               <effect>
+                  <Glow level="0.72" />
+               </effect>
+            </Label>
+            <Button alignment="CENTER" layoutX="728.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitFunction" style="-fx-background-color: #a63838; -fx-background-radius: 50%;" text="X" textAlignment="CENTER" textFill="#ebebeb">
+               <font>
+                  <Font name="Russo One" size="13.0" />
+               </font>
+               <effect>
+                  <Glow />
+               </effect>
+            </Button>
+            <Label alignment="CENTER" layoutX="282.0" layoutY="13.0" prefHeight="28.0" prefWidth="204.0" text="Strategic Symphony" textFill="#d4af37">
+               <font>
+                  <Font name="Russo One" size="18.0" />
+               </font>
+               <effect>
+                  <Bloom />
+               </effect>
+            </Label>
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
