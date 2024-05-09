@@ -1,3 +1,4 @@
+package application;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -5,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
     private static final int PORT = 1234;
+    private static final int MAX_CLIENTS = 5;
     private ServerSocket serverSocket;
     private List<ClientHandler> clients = new CopyOnWriteArrayList<>();
     private Game game;
@@ -18,15 +20,73 @@ public class Server {
     public void startServer() {
         try {
             while (true) {
-                Socket socket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(socket, this, nextClientId);
-                nextClientId++;
-                clients.add(clientHandler);
-                new Thread(clientHandler).start();
+            	if (clients.size() < MAX_CLIENTS) {
+	                Socket socket = serverSocket.accept();
+	                ClientHandler clientHandler = new ClientHandler(socket, this, nextClientId);
+	                nextClientId++;
+	                clients.add(clientHandler);
+	                new Thread(clientHandler).start();
+            	}else {
+
+            		System.out.println("Limita maxima de clienti a fost atinsa.");
+
+            		break;
+
+            	}
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void stopServer() {
+
+        try {
+
+            if (serverSocket != null && !serverSocket.isClosed()) {
+
+                serverSocket.close();
+
+            }
+
+            
+
+            for (ClientHandler client : clients) {
+
+                client.stop();
+
+            }
+
+        } catch (IOException ex) {
+
+            System.err.println("Error stopping the server: " + ex.getMessage());
+
+        }
+
+    }
+
+    
+
+    public int getNumClients() {
+
+        return clients.size();
+
+    }
+
+    
+
+    public void addClient(ClientHandler client) {
+
+        clients.add(client);
+
+    }
+
+    
+
+    public List<ClientHandler> getClients() {
+
+        return clients;
+
     }
 
     public void removeClient(ClientHandler client) {
@@ -51,6 +111,15 @@ public class Server {
     public void putPiece(int x, int y, ClientHandler client) {
     	if (game.isValidMove(x, y, client.getId())) {
 	    	if (game.putPiece(x, y, client.getId())) {
+	    		if(client.getFreeDomJoker() == false) {
+	    			client.sendMessage("You don't have freedom joker");
+	    		}
+	    		if(client.getReplaceJoker() == false) {
+	    			client.sendMessage("You don't have replace joker");
+	    		}
+	    		if(client.getDoubleMoveJoker() == false) {
+	    			client.sendMessage("You don't have double move joker");
+	    		}
 	    		client.sendMessage("Piece was placed.");
 	    		System.out.println("Piece was placed.");
 	    	}
@@ -80,6 +149,19 @@ public class Server {
     	} else {
     		client.sendMessage("Not your turn.");
     	}
+    }
+    
+    public void getPlayerColors(ClientHandler clientx) {
+    	String message = "Colors:";
+    	 for (ClientHandler client : clients) {
+             message += client.getId() + "||" + client.getColor()+",";
+             
+             
+         }
+    	 if (!message.isEmpty()) {
+    		    message = message.substring(0, message.length() - 1);
+    	 }
+    	 clientx.sendMessage(message);
     }
     
     public void toggleDoubleMoveJoker(ClientHandler client) {
@@ -128,12 +210,37 @@ public class Server {
     }
     
     public Boolean isUniqueUserName(String name) {
+
+    	if (name == null) {
+
+    		return false;
+
+    	}
+
+    	
+
+        int count = 0;
+
         for (ClientHandler client : clients) {
-            if (client.getUserName().trim().equalsIgnoreCase(name.trim())) {
-                return false;
+
+        	System.out.println(client.getUserName());
+
+            if (client.getUserName().equalsIgnoreCase(name)) {
+
+                count++;
+
+                if (count > 1) {
+
+                    return false;
+
+                }
+
             }
+
         }
+
         return true;
+
     }
     
     private void assignRandomColor(ClientHandler client) {
@@ -168,6 +275,9 @@ public class Server {
     			assignRandomColor(client);
     		}
     	}
+    	for (ClientHandler client : clients) {
+    		getPlayerColors(client);
+    	}
     	System.out.println("Game ready to start");
     	for (ClientHandler client : clients) {
     		client.setGameStarted(true);
@@ -183,11 +293,11 @@ public class Server {
     		for (int j = 0; j < game.getNumCols(); j++) {
     			sboard += game.getValueAtPosition(i, j) + " ";
     		}
-    		sboard += '\n';
+    		sboard += "|";
     	}
     	
     	for (int i = 0; i < clients.size(); i++) {
-    		clients.get(i).sendMessage(sboard + (game.currentTurn == i ? "Your turn" : ""));
+    		clients.get(i).sendMessage(sboard + (game.currentTurn == i ? "|Your turn" : ""));
     	}
     }
     
