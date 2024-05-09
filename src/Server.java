@@ -40,53 +40,29 @@ public class Server {
     }
     
     public void stopServer() {
-
         try {
-
             if (serverSocket != null && !serverSocket.isClosed()) {
-
                 serverSocket.close();
-
             }
-
-            
 
             for (ClientHandler client : clients) {
-
                 client.stop();
-
             }
-
         } catch (IOException ex) {
-
             System.err.println("Error stopping the server: " + ex.getMessage());
-
         }
-
     }
-
-    
-
+	
     public int getNumClients() {
-
         return clients.size();
-
     }
-
-    
 
     public void addClient(ClientHandler client) {
-
         clients.add(client);
-
     }
-
-    
-
+	
     public List<ClientHandler> getClients() {
-
         return clients;
-
     }
 
     public void removeClient(ClientHandler client) {
@@ -210,37 +186,23 @@ public class Server {
     }
     
     public Boolean isUniqueUserName(String name) {
-
     	if (name == null) {
-
     		return false;
-
     	}
-
-    	
-
         int count = 0;
 
         for (ClientHandler client : clients) {
-
         	System.out.println(client.getUserName());
-
             if (client.getUserName().equalsIgnoreCase(name)) {
-
                 count++;
-
+		    
                 if (count > 1) {
-
                     return false;
-
                 }
-
             }
-
         }
 
         return true;
-
     }
     
     private void assignRandomColor(ClientHandler client) {
