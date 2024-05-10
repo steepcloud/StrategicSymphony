@@ -36,21 +36,20 @@ Once the server is running, clients can connect to it using a compatible client 
 
 ### Building the Project
 
-Before running the project, make sure to modify the `.project` file to include the required JARs (byte-buddy, byte-buddy-agent, mockito-core) in the build path. Add the following entries to the `<buildSpec>` section of the `.project` file:
+Before running the project, make sure to modify the `.classpath` file to include the required JARs (byte-buddy, byte-buddy-agent, mockito-core) in the build path. Add the following entries to the `<classpathentry>` section of the `.classpath` file:
 
 ```xml
 <buildSpec>
-    <buildCommand>
-        <name>org.eclipse.jdt.core.javabuilder</name>
-        <arguments>
-        </arguments>
-    </buildCommand>
-    <buildCommand>
-        <name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
-        <arguments>
-        </arguments>
-    </buildCommand>
-</buildSpec>
+ <?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+    <!-- Add the following entries for the required JARs -->
+    <classpathentry kind="lib" path="libs/byte-buddy.jar"/>
+    <classpathentry kind="lib" path="libs/byte-buddy-agent.jar"/>
+    <classpathentry kind="lib" path="libs/mockito-core.jar"/>
+    <classpathentry kind="output" path="bin"/>
+</classpath>
 ```
 
 ## Game rules
