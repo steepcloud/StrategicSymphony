@@ -271,6 +271,24 @@ public class Client extends Application {
 
             System.out.println("Ai trimis ca esti " + message + ".");
             
+            
+            
+            //String userName = stdIn.readLine();
+            //out.println(userName);
+
+            
+            // Continuously read user input and send it to the server
+            /*
+            while (true) {
+                userInput = stdIn.readLine();
+                if (userInput != null) {
+                    out.println(userInput);
+                    if ("quit".equalsIgnoreCase(userInput.trim())) {
+                        break; // Exit the loop if user types 'quit'
+                    }
+                }
+            }
+            */
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + HOST);
             System.exit(1);
@@ -294,6 +312,8 @@ public class Client extends Application {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            
+            
             
         }catch (IOException e) {
                 e.printStackTrace();
@@ -386,6 +406,18 @@ public class Client extends Application {
                     	String[] parts = fromServer.split("\\|\\|");
                     	
                     	boolean yourTurn = parts.length > 1;
+                    	if(fromServer.contains("You are now ready")) {
+                    		Platform.runLater(() -> {
+                    			_serverMessageLbl.setText("Esti ready!");
+                        		_serverMessageLbl.setOpacity(1f);
+                			});
+                    	}
+                    	if(fromServer.contains("You are now not ready")) {
+                    		Platform.runLater(() -> {
+                    			_serverMessageLbl.setText("Nu esti ready!");
+                        		_serverMessageLbl.setOpacity(1f);
+                			});
+                    	}
                     	if(fromServer.contains("Invalid move. You can only place a piece in an empty cell with at least one neighboring cell of the same color."))
                     	{
                     		canPut = true;
@@ -477,6 +509,9 @@ public class Client extends Application {
                 				setUserPicker(0f);
                 				_readyButton.setOpacity(0f);
                 				_readyButton.setDisable(true);
+                				
+                                		_serverMessageLbl.setOpacity(0f);
+                        		
                 			});
                     		
                     		
@@ -674,12 +709,13 @@ public class Client extends Application {
    	 		_readyButton.setDisable(false);
    	 		setUserPicker(0f);
    	 	}
+   	 		
    	 	
    }
     
     @FXML
     public void exitFunction() {
-    	
+    	Platform.exit();
     }
     
 }
