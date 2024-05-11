@@ -270,25 +270,6 @@ public class Client extends Application {
             out.println(message);
 
             System.out.println("Ai trimis ca esti " + message + ".");
-            
-            
-            
-            //String userName = stdIn.readLine();
-            //out.println(userName);
-
-            
-            // Continuously read user input and send it to the server
-            /*
-            while (true) {
-                userInput = stdIn.readLine();
-                if (userInput != null) {
-                    out.println(userInput);
-                    if ("quit".equalsIgnoreCase(userInput.trim())) {
-                        break; // Exit the loop if user types 'quit'
-                    }
-                }
-            }
-            */
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + HOST);
             System.exit(1);
